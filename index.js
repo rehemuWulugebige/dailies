@@ -7,15 +7,40 @@ app.use(express.json())
 const genres = []
 
 /*
- * The post/creat of an genre
+ * The post/create of an genre
  */
+app.post('/api/genres', (req, res) => {
 
+    const { error } = validateGenre(req.body)
+
+    if (error) {
+        return res.status(400).send(error.details[0].message)
+    }
+
+    const genre = {
+        id: genres.length + 1, 
+        name: req.body.name,
+        description: req.body.description,
+        examples: req.body.examples
+    }
+
+    genres.push(genre)
+
+    console.log(genre)
+
+    res.send(genre)
+
+})
+
+/*
+ * Function for which to validate the JSON genre
+ */
 function validateGenre(genre) {
 
     const method = (value, helpers) => {
-        const wordCount = value.trim().split('/\s+/').filter(Boolean).length
+        const wordCount = value.trim().split(/\s+/).filter(Boolean).length
         if (wordCount < 3) {
-            return helpers.error('At least three word is needed')
+            return helpers.message('At least three word is needed for description')
         }
         return value
     }
@@ -32,7 +57,7 @@ function validateGenre(genre) {
 
 }
 
-const port = process.env.PORT | 3002
+const port = process.env.PORT || 3002
 
 app.listen(port, () => console.log(`listening to ${port}...`))
 
