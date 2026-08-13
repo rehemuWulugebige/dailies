@@ -73,6 +73,27 @@ app.put('api/genres/:id', (req, res) => {
 
 })
 
+/*
+ * Implement delete 
+ */
+app.delete('/api/genres/:id', (req, res) => {
+    const genre = genres.find((g) => {
+        return g.id === Number(req.params.id)
+    })
+
+    const genreIndex = genres.findIndex((g) => {
+        return g.id === Number(req.params.id)
+    })
+
+    if (!genre) {
+        return res.status(404).send(`The genre with the given id ${req.body.params.id} was not found`)
+    }
+
+    genres.splice(genreIndex, 1)
+
+    res.send(genre)
+
+})
 
 /*
  * Function for which to validate the JSON genre
