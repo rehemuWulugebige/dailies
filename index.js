@@ -56,7 +56,7 @@ app.get('/api/genres/:id', (req, res) => {
  */
 app.put('api/genres/:id', (req, res) => {
     const genre = genres.find((g) => {
-        return g.id === Number(req.body.params.id)
+        return g.id === Number(req.params.id)
     })
 
     if (!genre) {
@@ -72,6 +72,7 @@ app.put('api/genres/:id', (req, res) => {
     res.send(genre)
 
 })
+
 
 /*
  * Function for which to validate the JSON genre
