@@ -60,7 +60,7 @@ app.put('api/genres/:id', (req, res) => {
     })
 
     if (!genre) {
-        return res.status(404).send(`The genre with the given id ${req.body.params.id} was not found`)
+        return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
     }
 
     genre = {
@@ -74,7 +74,7 @@ app.put('api/genres/:id', (req, res) => {
 })
 
 /*
- * Implement delete 
+ * Implement delete for specific id
  */
 app.delete('/api/genres/:id', (req, res) => {
     const genre = genres.find((g) => {
@@ -86,7 +86,7 @@ app.delete('/api/genres/:id', (req, res) => {
     })
 
     if (!genre) {
-        return res.status(404).send(`The genre with the given id ${req.body.params.id} was not found`)
+        return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
     }
 
     genres.splice(genreIndex, 1)
