@@ -45,7 +45,7 @@ app.get('/api/genres/:id', (req, res) => {
     })
 
     if (!genre) {
-        return res.status(404).send(`The genre with the given id ${req.body.params.id} was not found`)
+        return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
     }
 
     res.send(genre)
@@ -54,7 +54,7 @@ app.get('/api/genres/:id', (req, res) => {
 /*
  * This is how we update the genre we already have
  */
-app.put('api/genres/:id', (req, res) => {
+app.put('/api/genres/:id', (req, res) => {
     const genre = genres.find((g) => {
         return g.id === Number(req.params.id)
     })
@@ -63,11 +63,15 @@ app.put('api/genres/:id', (req, res) => {
         return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
     }
 
-    genre = {
-        name: req.body.name,
-        description: req.body.description,
-        examples: req.body.examples
+    const { error } = validateGenre(req.body)
+
+    if (error) {
+        return res.status(400).send(error.details[0].message)
     }
+
+    genre.name = req.body.name
+    genre.description = req.body.description
+    genre.examples = req.body.examples
 
     res.send(genre)
 
