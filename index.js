@@ -33,15 +33,15 @@ app.post('/api/genres', (req, res) => {
 /*
  * This is the get to obtain the JSON genres
  */
-app.get('/api/genres', (req, res) => {
+app.get('/api/genres/', (req, res) => {
     res.send(genres)
 })
 /*
  * This returns the genre with specific id
  */
 app.get('/api/genres/:id', (req, res) => {
-    const genre = genres.find((e) => {
-        return e.id === Number(req.body.params.id)
+    const genre = genres.find((g) => {
+        return g.id === Number(req.params.id)
     })
 
     if (!genre) {
@@ -49,6 +49,28 @@ app.get('/api/genres/:id', (req, res) => {
     }
 
     res.send(genre)
+})
+
+/*
+ * This is how we update the genre we already have
+ */
+app.put('api/genres/:id', (req, res) => {
+    const genre = genres.find((g) => {
+        return g.id === Number(req.body.params.id)
+    })
+
+    if (!genre) {
+        return res.status(404).send(`The genre with the given id ${req.body.params.id} was not found`)
+    }
+
+    genre = {
+        name: req.body.name,
+        description: req.body.description,
+        examples: req.body.examples
+    }
+
+    res.send(genre)
+
 })
 
 /*
