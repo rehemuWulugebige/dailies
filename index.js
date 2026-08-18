@@ -8,6 +8,7 @@ app.use(express.json())
 app.use('/api/genres/', genres)
 
 
+
 const port = process.env.PORT || 3002
 
 app.listen(port, () => console.log(`listening to ${port}...`))
