@@ -1,7 +1,28 @@
 const express = require('express')
+const Joi = require('joi')
+const mongoose = require('mongoose')
 const router = express.Router()
 
+const Genre = mongoose.model('Genre', new mongoose.Schema({
+    name: {
+        type: String, 
+        required: true,
+        minlength: 5,
+        maxlength: 50
+    }, 
+}))
 
+async function createGenre() {
+    const genre = new Genre({
+        name: String, 
+        description: 'test', 
+        examples: [ 'test' ]
+    })
+    const result = await genre.save()
+    console.log(result)
+}
+
+createGenre()
 
 const genres = []
 
