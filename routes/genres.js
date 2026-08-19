@@ -42,13 +42,12 @@ router.get('/', async (req, res) => {
         .sort()
     res.send(genres)
 })
+
 /*
  * This returns the genre with specific id
  */
-router.get('/:id', (req, res) => {
-    const genre = genres.find((g) => {
-        return g.id === Number(req.params.id)
-    })
+router.get('/:id', async (req, res) => {
+    const genre = await Genre.findById(req.params.id)
 
     if (!genre) {
         return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
@@ -60,24 +59,21 @@ router.get('/:id', (req, res) => {
 /*
  * This is how we update the genre we already have
  */
-router.put('/:id', (req, res) => {
-    const genre = genres.find((g) => {
-        return g.id === Number(req.params.id)
-    })
-
-    if (!genre) {
-        return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
-    }
-
+router.put('/:id', async (req, res) => {
     const { error } = validateGenre(req.body)
 
     if (error) {
         return res.status(400).send(error.details[0].message)
     }
 
-    genre.name = req.body.name
-    genre.description = req.body.description
-    genre.examples = req.body.examples
+    const genre = await Genre.findByIdAndUpdate(req.params.id, 
+        { name: req.body.name }, 
+        {new : true}
+    )
+
+    if (!genre) {
+        return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
+    }
 
     res.send(genre)
 
@@ -86,16 +82,12 @@ router.put('/:id', (req, res) => {
 /*
  * Implement delete for specific id
  */
-router.delete('/:id', (req, res) => {
-    const genreIndex = genres.findIndex((g) => {
-        return g.id === Number(req.params.id)
-    })
+router.delete('/:id', async (req, res) => {
+    const genre = await Genre.findByIdAndDelete(req.params.id)
 
-    if (genreIndex === -1) {
+    if (!genre) {
         return res.status(404).send(`The genre with the given id ${req.params.id} was not found`)
     }
-
-    const [genre] = genres.splice(genreIndex, 1)
 
     res.send(genre)
 
