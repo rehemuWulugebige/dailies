@@ -1,11 +1,25 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const genres = require('./routes/genres')
 const Joi = require('joi')
-
 const app = express()
 
 app.use(express.json())
 app.use('/api/genres/', genres)
+
+const url = 'mongodb://localhost:27017/dailies'
+
+async function connect(url){
+    try {
+        await mongoose.connect(url)
+        console.log('Connected to MongoDB for Dailies...')
+    } catch(err) {
+        console.log('Failed to connect MongoDB...', err)
+    }
+}
+
+connect(url)
+
 
 
 
