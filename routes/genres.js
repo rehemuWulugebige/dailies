@@ -53,7 +53,10 @@ router.post('/', (req, res) => {
 /*
  * This is the get to obtain the JSON genres
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const genres = await Genre
+        .find()
+        .sort()
     res.send(genres)
 })
 /*
