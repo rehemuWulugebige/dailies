@@ -1,11 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const genres = require('./routes/genres')
+const customers = require('./routes/customers')
 const Joi = require('joi')
 const app = express()
 
 app.use(express.json())
 app.use('/api/genres/', genres)
+app.use('/api/customers/', customers)
 
 const url = 'mongodb://localhost:27017/dailies'
 
@@ -19,8 +21,6 @@ async function connect(url){
 }
 
 connect(url)
-
-
 
 
 const port = process.env.PORT || 3002
