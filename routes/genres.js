@@ -12,24 +12,10 @@ const Genre = mongoose.model('Genre', new mongoose.Schema({
     }, 
 }))
 
-async function createGenre() {
-    const genre = new Genre({
-        name: String, 
-        description: 'test', 
-        examples: [ 'test' ]
-    })
-    const result = await genre.save()
-    console.log(result)
-}
-
-createGenre()
-
-const genres = []
-
 /*
  * The post/create of an genre
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 
     const { error } = validateGenre(req.body)
 
@@ -37,14 +23,11 @@ router.post('/', (req, res) => {
         return res.status(400).send(error.details[0].message)
     }
 
-    const genre = {
-        id: genres.length + 1, 
-        name: req.body.name,
-        description: req.body.description,
-        examples: req.body.examples
-    }
+    let genre = new Genre({
+        name: req.body.name
+    })
 
-    genres.push(genre)
+    genre = await genre.save()
 
     res.send(genre)
 
