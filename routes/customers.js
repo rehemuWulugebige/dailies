@@ -11,6 +11,7 @@ const customerSchema = new mongoose.Schema({
 
 const Customer = mongoose.model('Customer', customerSchema)
 
+// Create customer
 router.post('/', async (req, res) => {
     const { error } = validateCustomer(req.body)
 
@@ -41,6 +42,32 @@ router.get('/:id', async (req, res) => {
 
     if (!customer) {
         return res.status(404).send('Customer with the given ID was NOT found')
+    }
+
+    res.send(customer)
+})
+
+// Update customer 
+router.put('/:id', async (req, res) => {
+    const { error } = validateCustomer(req.body)
+
+    if (error) {
+        return req.status(400).send(error.details[0].message)
+    }
+ 
+    const customer = await Customer.findByIdAndUpdate(req.params.id, 
+        {
+            isGold: req.body.isGold, 
+            name: req.body.name, 
+            phone: req.body.phone
+        }, 
+        {
+            new: true
+        }
+    )
+
+    if (!customer) {
+        return res.status(404).send('Customer with the given ID is not found')
     }
 
     res.send(customer)
