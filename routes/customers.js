@@ -73,6 +73,17 @@ router.put('/:id', async (req, res) => {
     res.send(customer)
 })
 
+// Customer deletion
+router.delete('/:id', async (req, res) => {
+    const customer = await Customer.findOneAndDelete(req.params.id)
+
+    if (!customer) { 
+        return res.status(404).send("Customer with the given ID was not found")
+    }
+
+    res.send(customer)
+})
+
 function validateCustomer(customer) {
     const schema = Joi.object({
         isGold: Joi.boolean(),
