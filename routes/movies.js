@@ -1,4 +1,3 @@
-const mongoose = require("mongoose")
 const express = require("express")
 const { Movie, validate } = require("../model/movie")
 const { Genre } = require("../model/genre")
