@@ -1,10 +1,11 @@
+const auth = require('../middleware/auth')
 const express = require("express")
 const router = express.Router()
 const mongoose = require("mongoose")
 const { Customer, validate } = require("../model/customer.js")
 
 // Create customer
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body)
 
     if (error) {

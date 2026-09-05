@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const express = require("express")
 const router = express.Router()
 const mongoose = require("mongoose")
@@ -5,7 +6,7 @@ const { Rental, validate } = require("../model/rental")
 const { Movie } = require("../model/movie")
 const { Customer } = require("../model/customer")
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body)
     if (error) {
         return res.status(400).send(error.details[0].message)

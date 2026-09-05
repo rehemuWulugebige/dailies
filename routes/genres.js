@@ -1,12 +1,13 @@
+const auth = require('../middleware/auth')
 const express = require('express')
-const mongoose = require('mongoose')
 const router = express.Router()
 const { Genre, validate } = require('../model/genre.js')
 
 /*
  * The post/create of an genre
  */
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
+
     const { error } = validate(req.body)
 
     if (error) {
@@ -59,7 +60,7 @@ router.put('/:id', async (req, res) => {
 
     const genre = await Genre.findByIdAndUpdate(req.params.id,
         {
-            name: req.body.name 
+            name: req.body.name
         },
         {
             new : true

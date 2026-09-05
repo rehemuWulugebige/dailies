@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const express = require("express")
 const { Movie, validate } = require("../model/movie")
 const { Genre } = require("../model/genre")
@@ -6,7 +7,7 @@ const router = express.Router()
 /**
  * Creating the movie
  */
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body)
 
     if (error) {

@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const jwt = require("jsonwebtoken")
 const config = require("config")
 const bcrypt = require("bcrypt")
@@ -5,6 +6,11 @@ const _ = require("lodash")
 const express = require("express")
 const router = express.Router()
 const { User, validate } = require("../model/user")
+
+router.get("/me", auth, async (req, res) => {
+    const user = await User.findById(req.user._id).select('-password')
+    res.send(user)
+})
 
 router.post("/", async (req, res) => {
     const { error } = validate(req.body)
@@ -26,21 +32,11 @@ router.post("/", async (req, res) => {
 
     await user.save()
 
-    const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"))
+    const token = user.generateAuthToken()
 
     res.header("x-auth-token", token).send(
         _.pick(user, ["_id", "name", "email"]),
     )
-})
-
-router.get("/", async (req, res) => {
-    const user = await User.findById(req.body._id)
-
-    if (!user) {
-        return res.status(404).send("User with the given ID was not found")
-    }
-
-    res.send(user)
 })
 
 module.exports = router
